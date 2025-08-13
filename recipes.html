@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Toutes les recettes - Duggarswad</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/recipes.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+	<header class="header">
+		<div class="container">
+			<div class="logo">
+				<div class="logo-icon">
+					<img src="images/logo/logo.jpeg" alt="logo" class="logo-img">
+				</div>
+				<span class="logo-text">Duggarswad</span>
+			</div>
+			<nav class="nav">
+				<ul class="nav-list">
+					<li><a href="index.html" class="nav-link">Maison</a></li>
+					<li><a href="about.html" class="nav-link">À propos de nous</a></li>
+					<li><a href="contact.html" class="nav-link">Contact</a></li>
+					<li><a href="post-recipe.html" class="nav-link">Postez votre recette</a></li>
+					<li><a href="#" class="nav-link">Accès administrateur</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<section class="search-section">
+		<div class="container">
+			<h2 class="section-title">Toutes les recettes</h2>
+			<p class="section-subtitle">Recettes ajoutées par la communauté</p>
+			<div class="search-filters">
+				<div class="search-box">
+					<input type="text" id="recipeSearch" placeholder="Rechercher des recettes..." class="search-input">
+					<i class="fas fa-search search-icon"></i>
+				</div>
+				<div class="category-filter">
+					<select id="recipeCategoryFilter" class="filter-select">
+						<option value="">Toutes les catégories</option>
+						<option value="plats-principaux">Plats principaux</option>
+						<option value="entrees">Entrées</option>
+						<option value="desserts">Desserts</option>
+						<option value="boissons">Boissons</option>
+						<option value="accompagnements">Accompagnements</option>
+						<option value="sauces">Sauces et condiments</option>
+					</select>
+					<i class="fas fa-chevron-down filter-icon"></i>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="recipes">
+		<div class="container">
+			<div id="recipesGrid" class="recipes-grid"></div>
+			<div id="recipesEmpty" class="recipes-empty" style="display:none;">
+				<p>Aucune recette pour l'instant. Soyez le premier à en <a href="post-recipe.html">publier une</a> !</p>
+			</div>
+		</div>
+	</section>
+
+	<footer class="footer">
+		<div class="container">
+			<div class="footer-bottom">
+				<p>© 2025 Duggarswad. Tous droits réservés.</p>
+			</div>
+		</div>
+	</footer>
+
+	<script src="js/recipes.js"></script>
+	<script src="js/admin-popup.js"></script>
+</body>
+</html>
+
