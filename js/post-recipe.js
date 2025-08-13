@@ -1,4 +1,5 @@
 // DOM Elements
+let uploadedImages = [];
 const recipeForm = document.getElementById('recipeForm');
 const uploadArea = document.getElementById('uploadArea');
 const imageUpload = document.getElementById('imageUpload');
@@ -13,100 +14,7 @@ const previewBtn = document.getElementById('previewBtn');
 function updateCharacterCounter(textarea, counterElement, maxLength) {
     const currentLength = textarea.value.length;
     counterElement.textContent = currentLength;
-    
-    if (currentLength > maxLength * 0.9) {
-        counterElement.style.color = '#e74c3c';
-    } else if (currentLength > maxLength * 0.7) {
-        counterElement.style.color = '#f39c12';
-    } else {
-        counterElement.style.color = '#6c757d';
-    }
 }
-
-// Initialize character counters
-if (ingredientsTextarea && ingredientsCounter) {
-    ingredientsTextarea.addEventListener('input', () => {
-        updateCharacterCounter(ingredientsTextarea, ingredientsCounter, 2000);
-    });
-}
-
-if (instructionsTextarea && instructionsCounter) {
-    instructionsTextarea.addEventListener('input', () => {
-        updateCharacterCounter(instructionsTextarea, instructionsCounter, 5000);
-    });
-}
-
-// Image upload functionality
-let uploadedImages = [];
-
-// Drag and drop functionality
-if (uploadArea) {
-    uploadArea.addEventListener('click', () => {
-        imageUpload.click();
-    });
-
-    uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        handleImageFiles(files);
-    });
-
-    imageUpload.addEventListener('change', (e) => {
-        const files = e.target.files;
-        handleImageFiles(files);
-    });
-}
-
-function handleImageFiles(files) {
-    Array.from(files).forEach(file => {
-        if (file.type.startsWith('image/')) {
-            if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                showNotification('L\'image ' + file.name + ' dépasse la limite de 5 Mo', 'error');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imageData = {
-                    id: Date.now() + Math.random(),
-                    file: file,
-                    src: e.target.result
-                };
-                uploadedImages.push(imageData);
-                displayImagePreview(imageData);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            showNotification('Veuillez sélectionner uniquement des fichiers image', 'error');
-        }
-    });
-}
-
-function displayImagePreview(imageData) {
-    const previewItem = document.createElement('div');
-    previewItem.className = 'preview-item';
-    previewItem.dataset.id = imageData.id;
-    
-    previewItem.innerHTML = `
-        <img src="${imageData.src}" alt="Aperçu de l'image">
-        <button type="button" class="preview-remove" onclick="removeImage('${imageData.id}')">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    
-    imagePreview.appendChild(previewItem);
-}
-
 function removeImage(imageId) {
     uploadedImages = uploadedImages.filter(img => img.id != imageId);
     const previewItem = imagePreview.querySelector(`[data-id="${imageId}"]`);
@@ -149,6 +57,7 @@ function validateForm() {
 
 // Real-time validation
 const requiredInputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+
 requiredInputs.forEach(input => {
     input.addEventListener('blur', () => {
         if (!input.value.trim()) {
@@ -157,7 +66,6 @@ requiredInputs.forEach(input => {
             input.classList.remove('error');
         }
     });
-
     input.addEventListener('input', () => {
         if (input.value.trim()) {
             input.classList.remove('error');
@@ -205,8 +113,7 @@ if (previewBtn) {
             showNotification('Veuillez remplir tous les champs obligatoires pour prévisualiser', 'error');
             return;
         }
-        
-        // Create preview data
+        // Récupérer les données du formulaire
         const formData = new FormData(recipeForm);
         const previewData = {
             title: formData.get('recipeTitle'),
@@ -219,16 +126,16 @@ if (previewBtn) {
             instructions: formData.get('instructions'),
             history: formData.get('recipeHistory'),
             tips: formData.get('chefTips'),
-            images: uploadedImages
+            images: (typeof uploadedImages !== 'undefined') ? uploadedImages : []
         };
-        
-        // Store preview data in sessionStorage
+        // Stocker les données dans sessionStorage et ouvrir la page d'aperçu
         sessionStorage.setItem('recipePreview', JSON.stringify(previewData));
-        
-        // Open preview in new window (you can create a preview.html page)
-        showNotification('Fonctionnalité d\'aperçu en cours de développement', 'info');
+        window.open('preview.html', '_blank');
     });
 }
+
+
+
 
 // Notification system
 function showNotification(message, type = 'info') {
@@ -350,6 +257,7 @@ function autoSave() {
 
 // Add auto-save to form inputs
 const formInputs = recipeForm.querySelectorAll('input, select, textarea');
+
 formInputs.forEach(input => {
     input.addEventListener('input', autoSave);
 });
@@ -365,7 +273,6 @@ window.addEventListener('load', () => {
                 element.value = data[key];
             }
         });
-        
         // Update character counters
         if (ingredientsTextarea && data.ingredients) {
             updateCharacterCounter(ingredientsTextarea, ingredientsCounter, 2000);
@@ -381,6 +288,7 @@ function clearDraft() {
     localStorage.removeItem('recipeDraft');
 }
 
+
 // Enhanced form interactions
 document.addEventListener('DOMContentLoaded', () => {
     // Smooth scrolling for form sections
@@ -394,38 +302,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-    
     // Add visual feedback for form completion
     function updateFormProgress() {
         const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
         const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
         const progress = (filledFields.length / requiredFields.length) * 100;
-        
         // You can add a progress bar here if needed
         console.log(`Form completion: ${Math.round(progress)}%`);
     }
-    
     // Update progress on input
     formInputs.forEach(input => {
         input.addEventListener('input', updateFormProgress);
     });
-    
     // Initial progress check
     updateFormProgress();
-});
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + S to save draft
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        autoSave();
-        showNotification('Brouillon sauvegardé', 'success');
-    }
-    
-    // Ctrl/Cmd + Enter to submit
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        recipeForm.dispatchEvent(new Event('submit'));
-    }
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + S to save draft
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            autoSave();
+            showNotification('Brouillon sauvegardé', 'success');
+        }
+        // Ctrl/Cmd + Enter to submit
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            recipeForm.dispatchEvent(new Event('submit'));
+        }
+    });
 });

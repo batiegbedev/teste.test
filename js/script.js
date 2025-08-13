@@ -1,5 +1,68 @@
 // Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', function() {
+    // --- Hero Slider ---
+    const slides = document.querySelectorAll('.hero-slider .slide');
+    const prevBtn = document.querySelector('.hero-slider .slider-arrow.prev');
+    const nextBtn = document.querySelector('.hero-slider .slider-arrow.next');
+    const dots = document.querySelectorAll('.hero-slider .dot');
+    let currentSlide = 0;
+    let sliderInterval;
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+            dots[i].classList.toggle('active', i === index);
+        });
+        currentSlide = index;
+    }
+
+    function nextSlide() {
+        let next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+    }
+
+    function prevSlide() {
+        let prev = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prev);
+    }
+
+    function startSlider() {
+        sliderInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopSlider() {
+        clearInterval(sliderInterval);
+    }
+
+    if (slides.length > 0) {
+        showSlide(0);
+        startSlider();
+        if (nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                stopSlider();
+                nextSlide();
+                startSlider();
+            });
+            prevBtn.addEventListener('click', () => {
+                stopSlider();
+                prevSlide();
+                startSlider();
+            });
+        }
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                stopSlider();
+                showSlide(i);
+                startSlider();
+            });
+        });
+        // Pause slider on hover
+        const sliderContainer = document.querySelector('.hero-slider .slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', stopSlider);
+            sliderContainer.addEventListener('mouseleave', startSlider);
+        }
+    }
     
     // Navigation active
     const navLinks = document.querySelectorAll('.nav-link');
@@ -377,20 +440,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Précharger les images pour une meilleure performance
     function preloadImages() {
         const images = [
-            'images/hero-salad.jpg',
-            'images/recipe1-1.jpg',
-            'images/recipe1-2.jpg',
-            'images/recipe2-1.jpg',
-            'images/recipe2-2.jpg'
+            'images/images_pages/foot_backgroung1.jpg',
+            'images/images_pages/foot_background2.jpg',
+            'images/images_pages/caffee.jpeg'
         ];
-        
         images.forEach(src => {
             const img = new Image();
             img.src = src;
         });
     }
 
-    // Précharger les images
+    // Précharger les images du slider uniquement
     preloadImages();
 
     console.log('Duggarswad - Site chargé avec succès !');

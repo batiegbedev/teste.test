@@ -1,3 +1,70 @@
+/* Aperçu de recette (modale) */
+.preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 30, 30, 0.65);
+    z-index: 1;
+}
+.modal-content {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    padding: 32px 24px 24px 24px;
+    animation: fadeInModal 0.3s;
+}
+.modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #e74c3c;
+    cursor: pointer;
+    z-index: 3;
+    transition: color 0.2s;
+}
+.modal-close:hover {
+    color: #c0392b;
+}
+#previewContent {
+    margin-top: 10px;
+}
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 16px 6px 12px 6px;
+        max-width: 98vw;
+    }
+    .modal-close {
+        top: 8px;
+        right: 8px;
+        font-size: 1.5rem;
+    }
+}
 /* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
