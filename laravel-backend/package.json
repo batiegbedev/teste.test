@@ -1,0 +1,21 @@
+{
+  "name": "laravel-backend",
+  "version": "1.0.0",
+  "description": "Backend for Laravel application",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run watch",
+    "watch": "mix watch",
+    "build": "mix",
+    "test": "phpunit"
+  },
+  "dependencies": {
+    "laravel-mix": "^6.0.0"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "license": "MIT"
+}
