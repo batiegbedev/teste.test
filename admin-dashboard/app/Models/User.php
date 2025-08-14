@@ -21,7 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+<<<<<<< HEAD
         'role',
+=======
+>>>>>>> bf330a648a7b8366453911d006c1fdbba87992c0
     ];
 
     /**
@@ -46,6 +49,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+<<<<<<< HEAD
 
     /**
      * Check if user is admin
@@ -86,4 +90,6 @@ class User extends Authenticatable
     {
         return in_array($this->role, $roles);
     }
+=======
+>>>>>>> bf330a648a7b8366453911d006c1fdbba87992c0
 }

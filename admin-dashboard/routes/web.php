@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+<<<<<<< HEAD
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\PermissionController;
+=======
+>>>>>>> bf330a648a7b8366453911d006c1fdbba87992c0
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+<<<<<<< HEAD
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -49,4 +53,6 @@ Route::middleware(['auth', 'editeur'])->group(function () {
     Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
 });
 
+=======
+>>>>>>> bf330a648a7b8366453911d006c1fdbba87992c0
 require __DIR__.'/auth.php';
