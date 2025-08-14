@@ -15,7 +15,6 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-<<<<<<< HEAD
         if (!auth()->check()) {
             return redirect()->route('login');
         }
@@ -24,8 +23,6 @@ class AdminMiddleware
             abort(403, 'Accès refusé. Vous devez être administrateur.');
         }
 
-=======
->>>>>>> bf330a648a7b8366453911d006c1fdbba87992c0
         return $next($request);
     }
 }
