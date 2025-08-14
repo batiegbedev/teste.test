@@ -4,15 +4,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DynamicController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DynamicController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,6 +46,16 @@ Route::middleware(['auth', 'editeur'])->group(function () {
     Route::get('/recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
     Route::put('/recipes/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
     Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
+});
+
+// Routes dynamiques AJAX
+Route::prefix('api')->middleware(['auth'])->group(function () {
+    Route::post('/recipes', [DynamicController::class, 'createRecipe'])->name('api.recipes.create');
+    Route::delete('/recipes/{recipe}', [DynamicController::class, 'deleteRecipe'])->name('api.recipes.delete');
+    Route::patch('/recipes/{recipe}/toggle-status', [DynamicController::class, 'toggleRecipeStatus'])->name('api.recipes.toggle-status');
+    Route::get('/recipes/search', [DynamicController::class, 'searchRecipes'])->name('api.recipes.search');
+    Route::get('/stats', [DynamicController::class, 'getStats'])->name('api.stats');
+    Route::post('/notifications', [DynamicController::class, 'sendNotification'])->name('api.notifications.send');
 });
 
 require __DIR__.'/auth.php';
