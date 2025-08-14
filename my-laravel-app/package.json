@@ -1,0 +1,29 @@
+{
+  "name": "my-laravel-app",
+  "version": "1.0.0",
+  "description": "A robust, secure, and scalable Laravel application with user authentication and role management.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run development",
+    "development": "webpack --watch --progress --color --mode=development",
+    "watch": "webpack --watch --progress --color --mode=development",
+    "prod": "npm run production",
+    "production": "webpack --progress --color --mode=production",
+    "hot": "webpack serve --hot --progress --color"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^5.1.3",
+    "jquery": "^3.6.0",
+    "laravel-mix": "^6.0.19",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "sass": "^1.32.0",
+    "sass-loader": "^10.1.1",
+    "webpack": "^5.58.1",
+    "webpack-cli": "^4.8.0"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
