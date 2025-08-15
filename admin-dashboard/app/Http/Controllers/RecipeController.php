@@ -8,11 +8,20 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class RecipeController extends Controller
-{
-    public function __construct()
     {
-        $this->middleware('auth');
-    }
+        public function __construct()
+        {
+            // Tous les utilisateurs doivent être connectés
+            $this->middleware('auth');
+        
+            // Seuls les éditeurs peuvent créer, modifier ou supprimer
+            $this->middleware('editeur')->only([
+                'create', 'store', 'edit', 'update', 'destroy'
+            ]);
+        }
+        
+
+
 
     /**
      * Display all recipes
@@ -68,14 +77,19 @@ class RecipeController extends Controller
      * Show recipe details
      */
     public function show(Recipe $recipe): View
-    {
-        // Vérifier que l'utilisateur peut voir cette recette
-        if (!$recipe->isPublished() && !auth()->user()->hasAnyRole(['admin', 'editeur'])) {
-            abort(404);
-        }
-
-        return view('recipes.show', compact('recipe'));
+{
+    // Si la recette n'est pas publiée…
+    if (
+        !$recipe->isPublished()
+        && $recipe->user_id !== auth()->id() // …et que je ne suis pas l'auteur
+        && !auth()->user()->hasAnyRole(['admin', 'editeur']) // …et que je ne suis pas admin ou éditeur
+    ) {
+        abort(404);
     }
+
+    return view('recipes.show', compact('recipe'));
+}
+
 
     /**
      * Show recipe edit form
@@ -137,4 +151,7 @@ class RecipeController extends Controller
         return redirect()->route('recipes.index')
             ->with('success', 'Recette supprimée avec succès.');
     }
+    
+
+    
 }
