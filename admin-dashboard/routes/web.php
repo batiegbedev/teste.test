@@ -15,6 +15,23 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+
+Route::get('/about', function () {
+    return view('about');
+});
+Route::get('/contact', function () {
+    return view('contact'); // Laravel ira chercher resources/views/contact.blade.php
+});
+
+
+Route::get('/post-recipe', function () {
+    return view('post-recipe');
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
