@@ -29,20 +29,23 @@
     </div>
 
     {{-- Actions rapides --}}
-    <div class="flex flex-wrap gap-4 mb-8">
-        <a href="{{ route('recipes.create') }}" 
-           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
-           ➕ Ajouter une recette
-        </a>
-        <a href="{{ route('admin.users.index') }}" 
-           class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow">
-           👥 Gérer les utilisateurs
-        </a>
-        <a href="{{ route('recipes.index') }}" 
-           class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow">
-           📂 Gérer les recettes
-        </a>
-    </div>
+<div class="flex flex-wrap gap-4 mb-8">
+    <a href="{{ route('recipes.create') }}" 
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
+       ➕ Ajouter une recette
+    </a>
+
+    <a href="{{ route('admin.users.index') }}" 
+       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow">
+       👥 Gérer les utilisateurs
+    </a>
+
+    <a href="{{ route('recipes.index') }}" 
+       class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow">
+       📂 Gérer les recettes
+    </a>
+</div>
+
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 

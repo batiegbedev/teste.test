@@ -22,8 +22,9 @@
         <div>
             <label class="block text-sm font-medium text-gray-700">Rôle</label>
             <select name="role" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
-                <option value="admin">Admin</option>
-                <option value="user">Utilisateur</option>
+                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                <option value="editeur" {{ old('role') === 'editeur' ? 'selected' : '' }}>Éditeur</option>
+                <option value="abonne" {{ old('role') === 'abonne' ? 'selected' : '' }}>Abonné</option>
             </select>
         </div>
 

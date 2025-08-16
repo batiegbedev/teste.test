@@ -6,32 +6,23 @@ use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
+{
+    public function __construct()
     {
-        public function __construct()
-        {
-            // Tous les utilisateurs doivent être connectés
-            $this->middleware('auth');
-        
-            // Seuls les éditeurs peuvent créer, modifier ou supprimer
-            $this->middleware('editeur')->only([
-                'create', 'store', 'edit', 'update', 'destroy'
-            ]);
-        }
-        
-
-
+        // Tous les utilisateurs doivent être connectés
+        $this->middleware('auth');
+    }
 
     /**
-     * Display all recipes
+     * Affiche toutes les recettes
      */
     public function index(): View
     {
         $recipes = Recipe::with('user')
-            ->when(!auth()->user()->isAdmin(), function ($query) {
-                return $query->published();
-            })
+            ->when(!auth()->user()->isAdmin(), fn($query) => $query->published())
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
@@ -39,30 +30,34 @@ class RecipeController extends Controller
     }
 
     /**
-     * Show recipe creation form
+     * Formulaire de création
      */
-    public function create(): View
+    public function create()
     {
-        $this->middleware('editeur');
+        // ✅ Plus de Gate ici → tout utilisateur authentifié peut créer
         return view('recipes.create');
     }
 
     /**
-     * Store new recipe
+     * Enregistre une nouvelle recette
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->middleware('editeur');
-        
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
             'cooking_time' => 'required|integer|min:1',
-            'difficulty' => 'required|in:facile,moyen,difficile',
+            'difficulty' => 'required|in:facile,moyenne,difficile',
             'servings' => 'required|integer|min:1',
+            'image_path' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image_path')) {
+            $path = $request->file('image_path')->store('recipes', 'public');
+            $validated['image_path'] = 'storage/' . $path;
+        }
 
         $validated['user_id'] = auth()->id();
         $validated['status'] = 'draft';
@@ -74,31 +69,26 @@ class RecipeController extends Controller
     }
 
     /**
-     * Show recipe details
+     * Affiche une recette
      */
     public function show(Recipe $recipe): View
-{
-    // Si la recette n'est pas publiée…
-    if (
-        !$recipe->isPublished()
-        && $recipe->user_id !== auth()->id() // …et que je ne suis pas l'auteur
-        && !auth()->user()->hasAnyRole(['admin', 'editeur']) // …et que je ne suis pas admin ou éditeur
-    ) {
-        abort(404);
+    {
+        if (
+            !$recipe->isPublished()
+            && $recipe->user_id !== auth()->id()
+            && !auth()->user()->hasAnyRole(['admin', 'editeur'])
+        ) {
+            abort(404);
+        }
+
+        return view('recipes.show', compact('recipe'));
     }
 
-    return view('recipes.show', compact('recipe'));
-}
-
-
     /**
-     * Show recipe edit form
+     * Formulaire d'édition
      */
     public function edit(Recipe $recipe): View
     {
-        $this->middleware('editeur');
-        
-        // Vérifier que l'utilisateur peut éditer cette recette
         if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403, 'Vous ne pouvez éditer que vos propres recettes.');
         }
@@ -107,26 +97,37 @@ class RecipeController extends Controller
     }
 
     /**
-     * Update recipe
+     * Met à jour une recette
      */
     public function update(Request $request, Recipe $recipe): RedirectResponse
     {
-        $this->middleware('editeur');
-        
-        // Vérifier que l'utilisateur peut éditer cette recette
         if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403, 'Vous ne pouvez éditer que vos propres recettes.');
         }
-        
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
             'cooking_time' => 'required|integer|min:1',
-            'difficulty' => 'required|in:facile,moyen,difficile',
+            'difficulty' => 'required|in:facile,moyenne,difficile',
             'servings' => 'required|integer|min:1',
+            'image_path' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->has('delete_image') && $recipe->image_path) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $recipe->image_path));
+            $recipe->image_path = null;
+        }
+
+        if ($request->hasFile('image_path')) {
+            if ($recipe->image_path) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $recipe->image_path));
+            }
+            $path = $request->file('image_path')->store('recipes', 'public');
+            $validated['image_path'] = 'storage/' . $path;
+        }
 
         $recipe->update($validated);
 
@@ -135,15 +136,16 @@ class RecipeController extends Controller
     }
 
     /**
-     * Delete recipe
+     * Supprime une recette
      */
     public function destroy(Recipe $recipe): RedirectResponse
     {
-        $this->middleware('editeur');
-        
-        // Vérifier que l'utilisateur peut supprimer cette recette
         if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403, 'Vous ne pouvez supprimer que vos propres recettes.');
+        }
+
+        if ($recipe->image_path) {
+            Storage::disk('public')->delete(str_replace('storage/', '', $recipe->image_path));
         }
 
         $recipe->delete();
@@ -151,7 +153,4 @@ class RecipeController extends Controller
         return redirect()->route('recipes.index')
             ->with('success', 'Recette supprimée avec succès.');
     }
-    
-
-    
 }

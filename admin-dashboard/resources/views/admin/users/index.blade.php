@@ -26,10 +26,27 @@
                     <td class="px-6 py-4">{{ $user->name }}</td>
                     <td class="px-6 py-4">{{ $user->email }}</td>
                     <td class="px-6 py-4">
-                        <span class="inline-block px-3 py-1 text-sm rounded-full 
-                                     {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
-                            {{ ucfirst($user->role) }}
-                        </span>
+                        @switch($user->role)
+                            @case('admin')
+                                <span class="inline-block px-3 py-1 text-sm rounded-full bg-red-100 text-red-800">
+                                    🔴 Admin
+                                </span>
+                                @break
+                            @case('editeur')
+                                <span class="inline-block px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-800">
+                                    🟡 Éditeur
+                                </span>
+                                @break
+                            @case('abonne')
+                                <span class="inline-block px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">
+                                    🟢 Abonné
+                                </span>
+                                @break
+                            @default
+                                <span class="inline-block px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-800">
+                                    ⚪ Inconnu
+                                </span>
+                        @endswitch
                     </td>
                     <td class="px-6 py-4 text-right flex justify-end gap-2">
                         <a href="{{ route('admin.users.show', $user) }}" 
