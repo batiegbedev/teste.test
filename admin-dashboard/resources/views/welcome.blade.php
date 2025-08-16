@@ -25,7 +25,7 @@
                             <li><a href="{{ url('/welcome') }}" class="nav-link active">Maison</a></li>
                             <li><a href="{{ url('/about') }}" class="nav-link">À propos de nous</a></li>
                             <li><a href="{{ url('/contact') }}" class="nav-link">Contact</a></li>
-                            <li><a href="{{ url('/post-recipe') }}" class="nav-link">Postez votre recette</a></li>
+                           <!-- <li><a href="{{ url('/post-recipe') }}" class="nav-link">Postez votre recette</a></li> -->
                             <li><a href="{{ url('/login') }}" class="nav-link">Accès administrateur</a></li>
                         </ul>
                     </nav>
