@@ -45,6 +45,7 @@ class DashboardController extends Controller
     {
         return Recipe::with('user')->latest()->take(6)->get();
     }
+    
 
     private function getRecentActivity()
     {
@@ -137,6 +138,7 @@ class DashboardController extends Controller
                 'message' => 'Erreur lors du changement de statut',
             ], 500);
         }
+        
     }
 
     public function searchRecipes(Request $request): JsonResponse
@@ -218,4 +220,5 @@ class DashboardController extends Controller
             ], 500);
         }
     }
+    
 }

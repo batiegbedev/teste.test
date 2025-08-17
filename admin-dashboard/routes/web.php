@@ -30,6 +30,7 @@ Route::get('/contact', function () {
 Route::get('/post-recipe', function () {
     return view('post-recipe');
 });
+Route::patch('/recipes/{recipe}/toggle-status', [DashboardController::class, 'toggleRecipeStatus'])->name('recipes.toggle-status');
 
 
 

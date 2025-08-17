@@ -52,12 +52,39 @@
         <div class="lg:col-span-2">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
                 <h3 class="text-xl font-semibold mb-4">🆕 Latest Added Recipes</h3>
+
+                {{-- Filter by status --}}
+                <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
+                    <select name="status" onchange="this.form.submit()" class="border rounded px-2 py-1">
+                        <option value="">All statuses</option>
+                        <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
+                        <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                    </select>
+                </form>
+
                 @forelse($recentRecipes as $recipe)
                     <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-0">
                         <h4 class="font-semibold">{{ $recipe->title }}</h4>
-                        <p class="text-sm text-gray-500">
-                            Difficulty: {{ ucfirst($recipe->difficulty) }} — Status: {{ $recipe->status }}
-                        </p>
+
+                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                            <span>Difficulty: {{ ucfirst($recipe->difficulty) }}</span>
+
+                            @if ($recipe->status === 'published')
+                                <span class="inline-flex items-center bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                                    ✅ Published
+                                </span>
+                            @else
+                                <span class="inline-flex items-center bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                                    📝 Draft
+                                </span>
+                            @endif
+
+                            <button onclick="toggleStatus({{ $recipe->id }})"
+                                    class="ml-2 text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded">
+                                🔄 Toggle
+                            </button>
+                        </div>
+
                         <p class="mt-1 text-gray-700 dark:text-gray-300">
                             {{ \Illuminate\Support\Str::limit($recipe->description, 80) }}
                         </p>
@@ -88,4 +115,27 @@
     </div>
 
 </div>
+
+{{-- Script pour le bouton Toggle --}}
+<script>
+function toggleStatus(recipeId) {
+    fetch(`/recipes/${recipeId}/toggle-status`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert('Erreur : ' + data.message);
+        }
+    })
+    .catch(() => alert('Une erreur est survenue.'));
+}
+</script>
 @endsection
