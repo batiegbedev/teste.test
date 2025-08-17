@@ -3,39 +3,39 @@
 @section('content')
 <div class="max-w-5xl mx-auto py-10 px-4 animate-fadeIn">
 
-    <!-- Titre -->
+    <!-- Title -->
     <h1 class="text-4xl md:text-5xl font-extrabold text-center text-amber-900 mb-6 tracking-tight">
         {{ $recipe->title }}
     </h1>
 
-    <!-- Image principale avec effet -->
+    <!-- Main image with effect -->
     @if($recipe->image_path)
         <div class="relative overflow-hidden rounded-2xl shadow-lg group mb-10">
             <img src="{{ asset($recipe->image_path) }}" alt="{{ $recipe->title }}"
                  class="w-full h-[400px] md:h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             <span class="absolute bottom-4 left-4 px-4 py-2 bg-rose-600 text-white rounded-full shadow-lg text-sm">
-                🍫 Recette gourmande
+                🍫 Gourmet Recipe
             </span>
         </div>
     @endif
 
-    <!-- Infos principales -->
+    <!-- Main Info -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
         <div class="info-card">
-            ⏱ <span>Temps</span>
+            ⏱ <span>Time</span>
             <strong>{{ $recipe->cooking_time }} min</strong>
         </div>
         <div class="info-card">
-            🍽 <span>Portions</span>
+            🍽 <span>Servings</span>
             <strong>{{ $recipe->servings }}</strong>
         </div>
         <div class="info-card">
-            🔥 <span>Difficulté</span>
+            🔥 <span>Difficulty</span>
             <strong class="capitalize">{{ $recipe->difficulty }}</strong>
         </div>
         <div class="info-card">
-            👀 <span>Vues</span>
+            👀 <span>Views</span>
             <strong>{{ $recipe->views }}</strong>
         </div>
     </div>
@@ -45,9 +45,9 @@
         {{ $recipe->description }}
     </p>
 
-    <!-- Ingrédients -->
+    <!-- Ingredients -->
     <section class="mb-10">
-        <h2 class="section-title">🛒 Ingrédients</h2>
+        <h2 class="section-title">🛒 Ingredients</h2>
         <ul class="list-disc pl-6 space-y-1 text-gray-700">
             @foreach(explode(',', $recipe->ingredients) as $ingredient)
                 <li class="hover:translate-x-1 transition">{{ trim($ingredient) }}</li>
@@ -67,16 +67,16 @@
         </ol>
     </section>
 
-    <!-- Boutons d'action -->
+    <!-- Action Buttons -->
     <div class="flex justify-center gap-4">
         <a href="{{ route('dashboard') }}"
-           class="btn-secondary">⬅ Retour</a>
+           class="btn-secondary">⬅ Back</a>
         <a href="{{ route('recipes.edit', $recipe) }}"
-           class="btn-primary">✏ Modifier</a>
+           class="btn-primary">✏ Edit</a>
     </div>
 </div>
 
-<!-- Styles custom pour la version “gourmet” -->
+<!-- Custom styles for the “gourmet” version -->
 <style>
     .animate-fadeIn { animation: fadeIn 0.8s ease-out both; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

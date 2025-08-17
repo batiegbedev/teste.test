@@ -12,12 +12,12 @@ class RecipeController extends Controller
 {
     public function __construct()
     {
-        // Tous les utilisateurs doivent être connectés
+        // All users must be authenticated
         $this->middleware('auth');
     }
 
     /**
-     * Affiche toutes les recettes
+     * Display all recipes
      */
     public function index(): View
     {
@@ -30,16 +30,15 @@ class RecipeController extends Controller
     }
 
     /**
-     * Formulaire de création
+     * Show form to create a new recipe
      */
     public function create()
     {
-        // ✅ Plus de Gate ici → tout utilisateur authentifié peut créer
         return view('recipes.create');
     }
 
     /**
-     * Enregistre une nouvelle recette
+     * Store a new recipe
      */
     public function store(Request $request): RedirectResponse
     {
@@ -49,7 +48,7 @@ class RecipeController extends Controller
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
             'cooking_time' => 'required|integer|min:1',
-            'difficulty' => 'required|in:facile,moyenne,difficile',
+            'difficulty' => 'required|in:facile,moyen,difficile',
             'servings' => 'required|integer|min:1',
             'image_path' => 'nullable|image|max:2048',
         ]);
@@ -65,11 +64,11 @@ class RecipeController extends Controller
         Recipe::create($validated);
 
         return redirect()->route('recipes.index')
-            ->with('success', 'Recette créée avec succès.');
+            ->with('success', 'Recipe created successfully.');
     }
 
     /**
-     * Affiche une recette
+     * Display a recipe
      */
     public function show(Recipe $recipe): View
     {
@@ -85,24 +84,30 @@ class RecipeController extends Controller
     }
 
     /**
-     * Formulaire d'édition
+     * Show form to edit a recipe
      */
     public function edit(Recipe $recipe): View
-    {
-        if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
-            abort(403, 'Vous ne pouvez éditer que vos propres recettes.');
-        }
+{
+    $user = auth()->user();
 
-        return view('recipes.edit', compact('recipe'));
+    if (
+        $user->id !== $recipe->user_id &&
+        !$user->isAdmin() &&
+        $user->role !== 'editeur'
+    ) {
+        abort(403, 'Vous n’avez pas la permission d’éditer cette recette.');
     }
 
+    return view('recipes.edit', compact('recipe'));
+}
+
     /**
-     * Met à jour une recette
+     * Update a recipe
      */
     public function update(Request $request, Recipe $recipe): RedirectResponse
     {
         if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
-            abort(403, 'Vous ne pouvez éditer que vos propres recettes.');
+            abort(403, 'You can only edit your own recipes.');
         }
 
         $validated = $request->validate([
@@ -111,7 +116,7 @@ class RecipeController extends Controller
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
             'cooking_time' => 'required|integer|min:1',
-            'difficulty' => 'required|in:facile,moyenne,difficile',
+            'difficulty' => 'required|in:facile,moyen,difficile',
             'servings' => 'required|integer|min:1',
             'image_path' => 'nullable|image|max:2048',
         ]);
@@ -132,16 +137,16 @@ class RecipeController extends Controller
         $recipe->update($validated);
 
         return redirect()->route('recipes.show', $recipe)
-            ->with('success', 'Recette mise à jour avec succès.');
+            ->with('success', 'Recipe updated successfully.');
     }
 
     /**
-     * Supprime une recette
+     * Delete a recipe
      */
     public function destroy(Recipe $recipe): RedirectResponse
     {
         if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
-            abort(403, 'Vous ne pouvez supprimer que vos propres recettes.');
+            abort(403, 'You can only delete your own recipes.');
         }
 
         if ($recipe->image_path) {
@@ -151,6 +156,7 @@ class RecipeController extends Controller
         $recipe->delete();
 
         return redirect()->route('recipes.index')
-            ->with('success', 'Recette supprimée avec succès.');
+            ->with('success', 'Recipe deleted successfully.');
     }
+    
 }

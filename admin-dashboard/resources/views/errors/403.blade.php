@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>⛔ Accès refusé</h1>
-    <p>Désolé BATIEGBE, tu n’as pas les droits pour accéder à cette page.</p>
+    <h1>⛔ Access denied</h1>
+    <p>Sorry, dear user, you do not have permission to access this page.</p>
 @endsection

@@ -19,17 +19,17 @@ class PermissionController extends Controller
     public function changeRole(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'role' => 'required|in:admin,editeur,abonne',
+            'role' => 'required|in:admin,editor,subscriber',
         ]);
 
-        // Empêcher de changer son propre rôle
+        // Prevent changing own role
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas changer votre propre rôle.');
+            return back()->with('error', 'You cannot change your own role.');
         }
 
         $user->update(['role' => $validated['role']]);
 
-        return back()->with('success', "Rôle de {$user->name} changé en {$validated['role']}.");
+        return back()->with('success', "Role of {$user->name} changed to {$validated['role']}.");
     }
 
     /**
@@ -37,15 +37,15 @@ class PermissionController extends Controller
      */
     public function toggleStatus(User $user): RedirectResponse
     {
-        // Empêcher de désactiver son propre compte
+        // Prevent disabling own account
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas désactiver votre propre compte.');
+            return back()->with('error', 'You cannot deactivate your own account.');
         }
 
         $user->update(['is_active' => !$user->is_active]);
 
-        $status = $user->is_active ? 'activé' : 'désactivé';
-        return back()->with('success', "Compte de {$user->name} {$status}.");
+        $status = $user->is_active ? 'activated' : 'deactivated';
+        return back()->with('success', "Account of {$user->name} {$status}.");
     }
 
     /**

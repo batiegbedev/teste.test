@@ -10,49 +10,53 @@ class RecipeSeeder extends Seeder
 {
     public function run(): void
     {
+        // Create admin user
         $admin = User::firstOrCreate(
             ['email' => 'admin@example.com'],
             [
-                'name' => 'Administrateur',
+                'name' => 'Administrator',
                 'password' => bcrypt('password'),
                 'role' => 'admin',
             ]
         );
 
+        // Create editor user
         $editor = User::firstOrCreate(
-            ['email' => 'editeur@example.com'],
+            ['email' => 'editor@example.com'],
             [
-                'name' => 'Chef Éditeur',
+                'name' => 'Head Editor',
                 'password' => bcrypt('password'),
-                'role' => 'editeur',
+                'role' => 'editor',
             ]
         );
 
+        // Recipes data
         $recipes = [
             [
                 'title' => 'Pasta Carbonara',
-                'description' => 'Délicieuse recette de pâtes à la carbonara',
-                'ingredients' => "400g de spaghetti\n200g de pancetta\n4 œufs\n100g de parmesan",
-                'instructions' => "1. Cuire les pâtes\n2. Faire revenir la pancetta\n3. Mélanger avec les œufs",
+                'description' => 'Delicious pasta carbonara recipe',
+                'ingredients' => "400g spaghetti\n200g pancetta\n4 eggs\n100g parmesan",
+                'instructions' => "1. Cook the pasta\n2. Fry the pancetta\n3. Mix with the eggs",
                 'cooking_time' => 20,
-                'difficulty' => 'moyen',
+                'difficulty' => 'medium',
                 'status' => 'published',
                 'servings' => 4,
                 'user_id' => $editor->id,
             ],
             [
                 'title' => 'Tiramisu',
-                'description' => 'Dessert italien classique',
-                'ingredients' => "6 œufs\n500g de mascarpone\nBiscuits à la cuillère",
-                'instructions' => "1. Préparer la crème\n2. Tremper les biscuits\n3. Alterner les couches",
+                'description' => 'Classic Italian dessert',
+                'ingredients' => "6 eggs\n500g mascarpone\nLadyfingers",
+                'instructions' => "1. Prepare the cream\n2. Dip the biscuits\n3. Layer them alternately",
                 'cooking_time' => 30,
-                'difficulty' => 'facile',
+                'difficulty' => 'easy',
                 'status' => 'published',
                 'servings' => 6,
                 'user_id' => $editor->id,
             ],
         ];
 
+        // Insert recipes into database
         foreach ($recipes as $recipeData) {
             Recipe::firstOrCreate(
                 ['title' => $recipeData['title']],

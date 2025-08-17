@@ -11,6 +11,11 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user(); // récupère l'utilisateur connecté
+        return view('profile.index', compact('user'));
+    }
     /**
      * Display the user's profile form.
      */
@@ -20,6 +25,7 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
+    
 
     /**
      * Update the user's profile information.

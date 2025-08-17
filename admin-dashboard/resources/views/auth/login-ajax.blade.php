@@ -2,17 +2,17 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <!-- Popup de chargement -->
+    <!-- Loading Popup -->
     <div id="loadingPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl">
             <div class="flex items-center justify-center">
                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                <span class="ml-3 text-gray-700 dark:text-gray-300">Connexion en cours...</span>
+                <span class="ml-3 text-gray-700 dark:text-gray-300">Logging in...</span>
             </div>
         </div>
     </div>
 
-    <!-- Popup d'erreur dynamique -->
+    <!-- Dynamic Error Popup -->
     <div id="errorPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
             <div class="flex items-center mb-4">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="ml-3">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Erreur de connexion
+                        Login Error
                     </h3>
                 </div>
             </div>
@@ -32,13 +32,13 @@
             </div>
             <div class="mt-4 flex justify-end">
                 <button onclick="closeErrorPopup()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                    Fermer
+                    Close
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Popup de succès -->
+    <!-- Success Popup -->
     <div id="successPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
             <div class="flex items-center mb-4">
@@ -49,13 +49,13 @@
                 </div>
                 <div class="ml-3">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Connexion réussie !
+                        Login Successful!
                     </h3>
                 </div>
             </div>
             <div class="mt-2">
                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Redirection en cours...
+                    Redirecting...
                 </p>
             </div>
         </div>
@@ -83,35 +83,35 @@
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
             </label>
         </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    Forgot your password?
                 </a>
             @endif
 
             <x-primary-button class="ms-3" type="submit">
-                {{ __('Log in') }}
+                Log in
             </x-primary-button>
         </div>
     </form>
 
-    <!-- Script AJAX pour connexion dynamique -->
+    <!-- AJAX Login Script -->
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Afficher le popup de chargement
+            // Show loading popup
             showLoadingPopup();
             
-            // Récupérer les données du formulaire
+            // Get form data
             const formData = new FormData(this);
             
-            // Envoyer la requête AJAX
+            // Send AJAX request
             fetch('{{ route("login") }}', {
                 method: 'POST',
                 body: formData,
@@ -125,19 +125,19 @@
                 hideLoadingPopup();
                 
                 if (data.success) {
-                    // Connexion réussie
+                    // Login successful
                     showSuccessPopup();
                     setTimeout(() => {
                         window.location.href = data.redirect || '/dashboard';
                     }, 1500);
                 } else {
-                    // Erreur de connexion
-                    showErrorPopup(data.message || 'Erreur de connexion');
+                    // Login error
+                    showErrorPopup(data.message || 'Login error');
                 }
             })
             .catch(error => {
                 hideLoadingPopup();
-                showErrorPopup('Erreur de connexion au serveur');
+                showErrorPopup('Server connection error');
                 console.error('Error:', error);
             });
         });
@@ -154,7 +154,7 @@
             document.getElementById('errorMessage').textContent = message;
             document.getElementById('errorPopup').classList.remove('hidden');
             
-            // Animation d'apparition
+            // Fade-in animation
             const popup = document.getElementById('errorPopup');
             popup.style.opacity = '0';
             popup.style.transform = 'scale(0.9)';
@@ -169,7 +169,7 @@
         function showSuccessPopup() {
             document.getElementById('successPopup').classList.remove('hidden');
             
-            // Animation d'apparition
+            // Fade-in animation
             const popup = document.getElementById('successPopup');
             popup.style.opacity = '0';
             popup.style.transform = 'scale(0.9)';
@@ -192,7 +192,7 @@
             }, 300);
         }
 
-        // Fermer les popups en cliquant à l'extérieur
+        // Close popups by clicking outside
         document.addEventListener('click', function(event) {
             const errorPopup = document.getElementById('errorPopup');
             const successPopup = document.getElementById('successPopup');
@@ -205,7 +205,7 @@
             }
         });
 
-        // Fermer les popups avec la touche Escape
+        // Close popups with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeErrorPopup();

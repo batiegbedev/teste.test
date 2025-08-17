@@ -13,8 +13,8 @@ return [
 
     'roles' => [
         'admin' => [
-            'name' => 'Administrateur',
-            'description' => 'Accès complet à toutes les fonctionnalités',
+            'name' => 'Administrator',
+            'description' => 'Full access to all features',
             'permissions' => [
                 'manage_users',
                 'manage_recipes',
@@ -24,8 +24,8 @@ return [
             ],
         ],
         'editeur' => [
-            'name' => 'Éditeur',
-            'description' => 'Peut créer et modifier du contenu',
+            'name' => 'Editor',
+            'description' => 'Can create and edit content',
             'permissions' => [
                 'create_recipes',
                 'edit_own_recipes',
@@ -34,8 +34,8 @@ return [
             ],
         ],
         'abonne' => [
-            'name' => 'Abonné',
-            'description' => 'Accès en lecture seule au contenu',
+            'name' => 'Subscriber',
+            'description' => 'Read-only access to content',
             'permissions' => [
                 'view_recipes',
                 'view_profile',

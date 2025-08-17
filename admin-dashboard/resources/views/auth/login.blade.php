@@ -2,7 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <!-- Popup d'erreur dynamique -->
+    <!-- Dynamic Error Popup -->
     @if ($errors->any())
         <div id="errorPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="ml-3">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            Erreur de connexion
+                            Login Error
                         </h3>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="mt-4 flex justify-end">
                     <button onclick="closeErrorPopup()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                        Fermer
+                        Close
                     </button>
                 </div>
             </div>
@@ -57,24 +57,24 @@
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
             </label>
         </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    Forgot your password?
                 </a>
             @endif
 
             <x-primary-button class="ms-3" type="submit">
-                {{ __('Log in') }}
+                Log in
             </x-primary-button>
         </div>
     </form>
 
-    <!-- Script pour le popup dynamique -->
+    <!-- Script for Dynamic Error Popup -->
     <script>
         function closeErrorPopup() {
             const popup = document.getElementById('errorPopup');
@@ -83,7 +83,7 @@
             }
         }
 
-        // Fermer le popup en cliquant à l'extérieur
+        // Close the popup by clicking outside
         document.addEventListener('click', function(event) {
             const popup = document.getElementById('errorPopup');
             if (popup && event.target === popup) {
@@ -91,14 +91,14 @@
             }
         });
 
-        // Fermer le popup avec la touche Escape
+        // Close the popup with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeErrorPopup();
             }
         });
 
-        // Animation d'apparition du popup
+        // Popup fade-in animation
         document.addEventListener('DOMContentLoaded', function() {
             const popup = document.getElementById('errorPopup');
             if (popup) {

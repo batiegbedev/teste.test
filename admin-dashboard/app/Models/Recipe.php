@@ -89,9 +89,9 @@ class Recipe extends Model
     public function getDifficultyColorAttribute(): string
     {
         return match($this->difficulty) {
-            'facile' => 'green',
-            'moyen' => 'yellow',
-            'difficile' => 'red',
+            'easy' => 'green',
+            'medium' => 'yellow',
+            'hard' => 'red',
             default => 'gray'
         };
     }

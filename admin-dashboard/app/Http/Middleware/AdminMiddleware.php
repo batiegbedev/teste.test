@@ -20,7 +20,7 @@ class AdminMiddleware
         }
 
         if (!auth()->user()->isAdmin()) {
-            abort(403, 'Accès refusé. Vous devez être administrateur.');
+            abort(403, 'Access denied. You must be an administrator.');
         }
 
         return $next($request);

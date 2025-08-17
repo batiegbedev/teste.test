@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (validateForm(formData)) {
                 // Show loading state
                 submitBtn.classList.add('loading');
-                submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Envoi en cours...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Sending...';
                 
                 // Simulate form submission (replace with actual API call)
                 setTimeout(() => {
@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     charCount.textContent = '0';
                     
                     // Show success message
-                    showNotification('Votre message a été envoyé avec succès ! Nous vous répondrons dans les 24 heures.', 'success');
+                    showNotification('Your message has been sent successfully! We will reply within 24 hours.', 'success');
                     
                     // Reset button
                     submitBtn.classList.remove('loading');
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer un message';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
                 }, 2000);
             }
         });
@@ -87,32 +87,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check required fields
         if (!firstName || firstName.trim().length < 2) {
-            showNotification('Le prénom doit contenir au moins 2 caractères.', 'error');
+            showNotification('First name must be at least 2 characters.', 'error');
             return false;
         }
 
         if (!lastName || lastName.trim().length < 2) {
-            showNotification('Le nom de famille doit contenir au moins 2 caractères.', 'error');
+            showNotification('Last name must be at least 2 characters.', 'error');
             return false;
         }
 
         if (!email || !isValidEmail(email)) {
-            showNotification('Veuillez entrer une adresse email valide.', 'error');
+            showNotification('Please enter a valid email address.', 'error');
             return false;
         }
 
         if (!subject) {
-            showNotification('Veuillez sélectionner un sujet.', 'error');
+            showNotification('Please select a subject.', 'error');
             return false;
         }
 
         if (!message || message.trim().length < 10) {
-            showNotification('Le message doit contenir au moins 10 caractères.', 'error');
+            showNotification('Message must be at least 10 characters.', 'error');
             return false;
         }
 
         if (!terms) {
-            showNotification('Veuillez accepter les termes et conditions.', 'error');
+            showNotification('Please accept the terms and conditions.', 'error');
             return false;
         }
 
@@ -127,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Notification function
     function showNotification(message, type = 'info') {
-        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
@@ -137,83 +136,36 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
 
-        // Add notification styles if not already present
         if (!document.querySelector('#notification-styles')) {
             const style = document.createElement('style');
             style.id = 'notification-styles';
             style.textContent = `
-                .notification {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                    z-index: 10000;
-                    transform: translateX(100%);
-                    transition: transform 0.3s ease;
-                    max-width: 400px;
-                }
-                .notification.show {
-                    transform: translateX(0);
-                }
-                .notification-content {
-                    padding: 15px 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-                .notification-message {
-                    color: #333;
-                    font-size: 14px;
-                }
-                .notification-close {
-                    background: none;
-                    border: none;
-                    font-size: 20px;
-                    cursor: pointer;
-                    color: #666;
-                    margin-left: 10px;
-                }
-                .notification-success {
-                    border-left: 4px solid #27ae60;
-                }
-                .notification-error {
-                    border-left: 4px solid #e74c3c;
-                }
-                .notification-info {
-                    border-left: 4px solid #3498db;
-                }
+                .notification { position: fixed; top: 20px; right: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; transform: translateX(100%); transition: transform 0.3s ease; max-width: 400px; }
+                .notification.show { transform: translateX(0); }
+                .notification-content { padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; }
+                .notification-message { color: #333; font-size: 14px; }
+                .notification-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #666; margin-left: 10px; }
+                .notification-success { border-left: 4px solid #27ae60; }
+                .notification-error { border-left: 4px solid #e74c3c; }
+                .notification-info { border-left: 4px solid #3498db; }
             `;
             document.head.appendChild(style);
         }
 
-        // Add notification to DOM
         document.body.appendChild(notification);
 
-        // Show notification
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
+        setTimeout(() => { notification.classList.add('show'); }, 100);
 
-        // Handle close button
         const closeBtn = notification.querySelector('.notification-close');
         closeBtn.addEventListener('click', () => {
             notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
+            setTimeout(() => { document.body.removeChild(notification); }, 300);
         });
 
-        // Auto-close after 5 seconds
         setTimeout(() => {
             if (document.body.contains(notification)) {
                 notification.classList.remove('show');
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
+                setTimeout(() => { if (document.body.contains(notification)) document.body.removeChild(notification); }, 300);
             }
         }, 5000);
     }
@@ -222,14 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const formInputs = document.querySelectorAll('.form-group input, .form-group select, .form-group textarea');
     
     formInputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            validateField(this);
-        });
-        
-        input.addEventListener('input', function() {
-            // Remove error styling on input
-            this.style.borderColor = '#ddd';
-        });
+        input.addEventListener('blur', function() { validateField(this); });
+        input.addEventListener('input', function() { this.style.borderColor = '#ddd'; });
     });
 
     function validateField(field) {
@@ -239,35 +185,16 @@ document.addEventListener('DOMContentLoaded', function() {
         switch(fieldName) {
             case 'firstName':
             case 'lastName':
-                if (value.length < 2) {
-                    field.style.borderColor = '#e74c3c';
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
+                field.style.borderColor = value.length < 2 ? '#e74c3c' : '#27ae60';
                 break;
-                
             case 'email':
-                if (!isValidEmail(value)) {
-                    field.style.borderColor = '#e74c3c';
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
+                field.style.borderColor = !isValidEmail(value) ? '#e74c3c' : '#27ae60';
                 break;
-                
             case 'subject':
-                if (!value) {
-                    field.style.borderColor = '#e74c3c';
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
+                field.style.borderColor = !value ? '#e74c3c' : '#27ae60';
                 break;
-                
             case 'message':
-                if (value.length < 10) {
-                    field.style.borderColor = '#e74c3c';
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
+                field.style.borderColor = value.length < 10 ? '#e74c3c' : '#27ae60';
                 break;
         }
     }
@@ -275,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Smooth scroll for FAQ section
     const faqSection = document.querySelector('.faq-section');
     if (faqSection) {
-        // Add scroll animation for FAQ items
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -299,16 +225,11 @@ document.addEventListener('DOMContentLoaded', function() {
     contactCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
             const icon = this.querySelector('.contact-icon');
-            if (icon) {
-                icon.style.transform = 'scale(1.1)';
-            }
+            if (icon) icon.style.transform = 'scale(1.1)';
         });
-        
         card.addEventListener('mouseleave', function() {
             const icon = this.querySelector('.contact-icon');
-            if (icon) {
-                icon.style.transform = 'scale(1)';
-            }
+            if (icon) icon.style.transform = 'scale(1)';
         });
     });
 
@@ -318,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const platform = this.querySelector('i').className;
-            showNotification(`Redirection vers ${getPlatformName(platform)} en cours...`, 'info');
+            showNotification(`Redirecting to ${getPlatformName(platform)}...`, 'info');
         });
     });
 
@@ -327,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (className.includes('instagram')) return 'Instagram';
         if (className.includes('twitter')) return 'Twitter';
         if (className.includes('youtube')) return 'YouTube';
-        return 'le réseau social';
+        return 'social media';
     }
 
     console.log('Contact page loaded successfully!');

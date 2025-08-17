@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold mb-6">✏ Modifier la recette</h1>
+    <h1 class="text-3xl font-bold mb-6">✏ Edit Recipe</h1>
 
     <form action="{{ route('recipes.update', $recipe->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Titre</label>
+            <label class="block text-sm font-medium text-gray-700">Title</label>
             <input type="text" name="title" value="{{ old('title', $recipe->title) }}"
                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
         </div>
@@ -21,7 +21,7 @@
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Ingrédients</label>
+            <label class="block text-sm font-medium text-gray-700">Ingredients</label>
             <textarea name="ingredients" rows="3"
                       class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">{{ old('ingredients', $recipe->ingredients) }}</textarea>
         </div>
@@ -34,36 +34,36 @@
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700">Temps de cuisson (min)</label>
+                <label class="block text-sm font-medium text-gray-700">Cooking Time (min)</label>
                 <input type="number" name="cooking_time" value="{{ old('cooking_time', $recipe->cooking_time) }}"
                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Portions</label>
+                <label class="block text-sm font-medium text-gray-700">Servings</label>
                 <input type="number" name="servings" value="{{ old('servings', $recipe->servings) }}"
                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
             </div>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Difficulté</label>
+            <label class="block text-sm font-medium text-gray-700">Difficulty</label>
             <select name="difficulty" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
-                <option value="facile" {{ old('difficulty', $recipe->difficulty) === 'facile' ? 'selected' : '' }}>Facile</option>
-                <option value="moyenne" {{ old('difficulty', $recipe->difficulty) === 'moyenne' ? 'selected' : '' }}>Moyenne</option>
-                <option value="difficile" {{ old('difficulty', $recipe->difficulty) === 'difficile' ? 'selected' : '' }}>Difficile</option>
+                <option value="facile" {{ old('difficulty', $recipe->difficulty) === 'facile' ? 'selected' : '' }}>Easy</option>
+                <option value="moyen" {{ old('difficulty', $recipe->difficulty) === 'moyen' ? 'selected' : '' }}>Medium</option>
+                <option value="difficile" {{ old('difficulty', $recipe->difficulty) === 'difficile' ? 'selected' : '' }}>Hard</option>
             </select>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Image</label>
             @if($recipe->image_path)
-                <img src="{{ asset($recipe->image_path) }}" alt="Image actuelle"
+                <img src="{{ asset($recipe->image_path) }}" alt="Current image"
                      class="w-32 h-32 object-cover mb-2 rounded" id="current-image">
 
                 <button type="button" id="delete-image-btn"
                         class="text-red-600 underline text-sm mb-4 block">
-                    🗑 Supprimer l’image actuelle
+                    🗑 Delete Current Image
                 </button>
             @endif
             <input type="file" name="image_path" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm">
@@ -71,7 +71,7 @@
 
         <button type="submit"
                 class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-            💾 Enregistrer les modifications
+            💾 Save Changes
         </button>
     </form>
 </div>
@@ -96,7 +96,7 @@ document.querySelector('input[name="image_path"]').addEventListener('change', fu
 });
 
 document.getElementById('delete-image-btn')?.addEventListener('click', function () {
-    if (confirm("Voulez-vous vraiment supprimer l’image actuelle ?")) {
+    if (confirm("Do you really want to delete the current image?")) {
         const image = document.getElementById('current-image');
         if (image) image.remove();
 

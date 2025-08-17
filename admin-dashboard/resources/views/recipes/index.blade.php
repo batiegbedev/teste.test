@@ -3,10 +3,10 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold mb-6">Toutes les recettes</h1>
+    <h1 class="text-3xl font-bold mb-6">All Recipes</h1>
 
     @if(isset($recipes) && $recipes->isEmpty())
-        <p>Aucune recette disponible pour le moment.</p>
+        <p>No recipes available at the moment.</p>
     @elseif(isset($recipes))
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($recipes as $recipe)
@@ -20,7 +20,7 @@
                         <p class="text-sm text-gray-600 mb-4 line-clamp-3">{{ $recipe->description }}</p>
                         <a href="{{ route('recipes.show', $recipe) }}"
                            class="inline-block px-3 py-1 bg-rose-600 text-white rounded hover:bg-rose-700">
-                            Voir la recette
+                            View Recipe
                         </a>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
             <div class="mt-8">{{ $recipes->links() }}</div>
         @endif
     @else
-        <p class="text-gray-600">La variable $recipes n’a pas été fournie par le contrôleur.</p>
+        <p class="text-gray-600">The $recipes variable was not provided by the controller.</p>
     @endif
 </div>
 @endsection

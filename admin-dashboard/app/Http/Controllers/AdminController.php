@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Support\Facades\Hash;
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,8 +23,8 @@ class AdminController extends Controller
         $stats = [
             'total_users' => User::count(),
             'admins' => User::where('role', 'admin')->count(),
-            'editeurs' => User::where('role', 'editeur')->count(),
-            'abonnes' => User::where('role', 'abonne')->count(),
+            'editors' => User::where('role', 'editeur')->count(),
+            'subscribers' => User::where('role', 'abonne')->count(),
         ];
 
         return view('admin.dashboard', compact('stats'));
@@ -65,13 +63,13 @@ class AdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,editeur,abonne',
+            'role' => 'required|in:admin,editeur,subscriber',
         ]);
 
         $user->update($validated);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur mis à jour avec succès.');
+            ->with('success', 'User updated successfully.');
     }
 
     /**
@@ -81,39 +79,42 @@ class AdminController extends Controller
     {
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users.index')
-                ->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+                ->with('error', 'You cannot delete your own account.');
         }
 
         $user->delete();
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Utilisateur supprimé avec succès.');
+            ->with('success', 'User deleted successfully.');
     }
-    public function createUser()
+
+    /**
+     * Show create user form
+     */
+    public function createUser(): View
     {
         return view('admin.users.create');
     }
 
+    /**
+     * Store a new user
+     */
+    public function storeUser(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'role' => 'required|in:admin,editeur,abonne',
+        ]);
 
-public function storeUser(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'role' => 'required|in:admin,editeur,abonne',
-    ]);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+            'password' => Hash::make('password123'), // 🔐 default password
+        ]);
 
-    $user = User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'role' => $validated['role'],
-        'password' => Hash::make('password123'), // 🔐 mot de passe par défaut
-    ]);
-
-    return redirect()->route('admin.users.index')
-                     ->with('success', "✅ Utilisateur {$user->name} créé avec succès.");
-}
-
-    
-
+        return redirect()->route('admin.users.index')
+                         ->with('success', "✅ User {$user->name} created successfully.");
+    }
 }

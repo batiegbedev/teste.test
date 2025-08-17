@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EditeurMiddleware
+class EditorMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,7 +20,7 @@ class EditeurMiddleware
         }
 
         if (!auth()->user()->hasAnyRole(['admin', 'editeur'])) {
-            abort(403, 'Accès refusé. Vous devez être administrateur ou éditeur.');
+            abort(403, 'Access denied. You must be an administrator or editor.');
         }
 
         return $next($request);
