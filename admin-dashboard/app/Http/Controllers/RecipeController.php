@@ -106,9 +106,16 @@ class RecipeController extends Controller
      */
     public function update(Request $request, Recipe $recipe): RedirectResponse
     {
-        if ($recipe->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
-            abort(403, 'You can only edit your own recipes.');
-        }
+        $user = auth()->user();
+
+if (
+    $user->id !== $recipe->user_id &&
+    !$user->isAdmin() &&
+    $user->role !== 'editeur'
+) {
+    abort(403, 'Vous n’avez pas la permission de modifier cette recette.');
+}
+
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',

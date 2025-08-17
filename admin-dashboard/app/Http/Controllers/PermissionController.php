@@ -19,7 +19,7 @@ class PermissionController extends Controller
     public function changeRole(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
-            'role' => 'required|in:admin,editor,subscriber',
+            'role' => 'required|in:admin,editeur,abonne',
         ]);
 
         // Prevent changing own role

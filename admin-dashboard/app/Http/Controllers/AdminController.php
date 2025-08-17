@@ -63,7 +63,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,editeur,subscriber',
+            'role' => 'required|in:admin,editeur,abonne',
         ]);
 
         $user->update($validated);
